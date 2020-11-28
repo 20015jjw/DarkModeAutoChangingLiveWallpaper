@@ -13,8 +13,10 @@ import androidx.preference.PreferenceViewHolder
 class WallpaperPreviewPreference : Preference {
 
     private var mHolder: ConstraintLayout? = null
-    private var mStartImageView: ImageView? = null
+    var mStartImageView: ImageView? = null
     private var mEndImageView: ImageView? = null
+
+    lateinit var mDelegate: Delegate
 
     constructor(
         context: Context?,
@@ -40,7 +42,7 @@ class WallpaperPreviewPreference : Preference {
         mEndImageView = view.findViewById(R.id.EndImageView)
 
         mStartImageView?.setOnClickListener {
-            Toast.makeText(context, "start clicked", Toast.LENGTH_SHORT).show()
+            mDelegate.onImageViewClicked()
         }
 
         mEndImageView?.setOnClickListener {
@@ -60,5 +62,9 @@ class WallpaperPreviewPreference : Preference {
             }
             set.applyTo(mHolder)
         }
+    }
+
+    interface Delegate {
+        fun onImageViewClicked()
     }
 }

@@ -1,5 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.example.darkmodeautochanginglivewallpaper.WallpaperPreviewPreference android:layout="@layout/dual_wallpaper_pane" />
+    <com.example.darkmodeautochanginglivewallpaper.WallpaperPreviewPreference
+        android:key="@string/wallpaper_selector_pref_key"
+        android:layout="@layout/dual_wallpaper_pane" />
 
 </PreferenceScreen>
