@@ -1,8 +1,9 @@
-package com.example.darkmodeautochanginglivewallpaper
+package com.example.darkmodeautochanginglivewallpaper.util
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.example.darkmodeautochanginglivewallpaper.WallpaperMode
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

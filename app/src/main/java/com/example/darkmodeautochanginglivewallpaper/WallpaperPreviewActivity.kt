@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.drawToBitmap
+import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 import com.github.chrisbanes.photoview.PhotoView
 
 
 const val WALLPAPER_PREVIEW_ACTIVITY_IMAGE_URI_KEY = "wallpaper_preview_activity_image_uri_key"
 
 class WallpaperPreviewActivity : Activity() {
+
+    companion object {
+        private const val MAX_SCALE = 8F
+    }
 
     private var mImageUri: Uri? = null
 
@@ -29,7 +34,7 @@ class WallpaperPreviewActivity : Activity() {
         } else {
             mPhotoView = findViewById(R.id.photo_view)
             mPhotoView.setImageURI(mImageUri)
-            mPhotoView.maximumScale = 8F
+            mPhotoView.maximumScale = MAX_SCALE
             mPhotoView.setOnClickListener {
 
                 val bitmap = mPhotoView.drawToBitmap()

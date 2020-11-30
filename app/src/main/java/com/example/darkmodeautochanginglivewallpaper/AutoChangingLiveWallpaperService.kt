@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import android.widget.Toast
+import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
 
 class AutoChangingLiveWallpaperService : WallpaperService() {

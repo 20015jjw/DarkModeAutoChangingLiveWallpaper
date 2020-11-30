@@ -21,12 +21,12 @@ enum class WallpaperMode {
             return values()[bundle.getInt(KEY)]
         }
 
-        fun existsInIntent(intent: Intent): Boolean {
-            return intent.hasExtra(KEY)
+        fun existsInIntent(intent: Intent?): Boolean {
+            return intent?.hasExtra(KEY) ?: false
         }
 
-        fun existsInBundle(bundle: Bundle): Boolean {
-            return bundle.containsKey(KEY)
+        fun existsInBundle(bundle: Bundle?): Boolean {
+            return bundle?.containsKey(KEY) ?: false
         }
     }
 

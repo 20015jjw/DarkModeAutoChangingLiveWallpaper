@@ -1,4 +1,4 @@
-package com.example.darkmodeautochanginglivewallpaper
+package com.example.darkmodeautochanginglivewallpaper.util
 
 import android.content.Context
 import android.graphics.Point

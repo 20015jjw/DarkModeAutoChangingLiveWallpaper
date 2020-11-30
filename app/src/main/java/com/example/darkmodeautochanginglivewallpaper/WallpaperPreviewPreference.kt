@@ -7,9 +7,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
+import com.example.darkmodeautochanginglivewallpaper.util.DisplayUtil
+import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
 
 class WallpaperPreviewPreference : Preference {
+
+    companion object {
+        const val KEY_ID = R.string.wallpaper_selector_pref_key
+    }
 
     private var mHolder: ConstraintLayout? = null
     var mLightModeImageView: ImageView? = null
@@ -17,6 +23,7 @@ class WallpaperPreviewPreference : Preference {
 
     lateinit var mDelegate: Delegate
 
+    @Suppress("unused")
     constructor(
         context: Context?,
         attrs: AttributeSet?,
@@ -24,13 +31,17 @@ class WallpaperPreviewPreference : Preference {
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
+    @Suppress("unused")
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
     )
 
+    @Suppress("unused")
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+
+    @Suppress("unused")
     constructor(context: Context?) : super(context)
 
     override fun onBindViewHolder(holder: PreferenceViewHolder?) {
