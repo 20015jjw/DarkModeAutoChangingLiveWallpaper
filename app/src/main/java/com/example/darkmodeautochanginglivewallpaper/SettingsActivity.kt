@@ -20,6 +20,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragmentCompat(), WallpaperPreviewPreference.Delegate {
+        private var mModeInProgress: WallpaperMode? = null
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
@@ -29,19 +31,47 @@ class SettingsActivity : AppCompatActivity() {
             val wallpaperSelectorPreference =
                 preferenceManager.findPreference<WallpaperPreviewPreference>(getString(R.string.wallpaper_selector_pref_key))
             wallpaperSelectorPreference?.mDelegate = this
+
+            if (savedInstanceState != null && WallpaperMode.existsInBundle(savedInstanceState))
+                mModeInProgress = WallpaperMode.extractFromBundle(savedInstanceState)
         }
 
-        override fun onImageViewClicked() {
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, 0)
+        override fun onImageViewClicked(wallpaperMode: WallpaperMode) {
+            mModeInProgress = wallpaperMode
+            val galleryIntent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI).apply {
+                    wallpaperMode.putIntoIntent(this)
+                }
+            startActivityForResult(galleryIntent, 0)
+        }
+
+        override fun onSaveInstanceState(outState: Bundle) {
+            super.onSaveInstanceState(outState)
+            if (mModeInProgress != null) {
+                mModeInProgress!!.putIntoBundle(outState)
+            }
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
-            val wallpaperSelectorPreference =
-                preferenceManager.findPreference<WallpaperPreviewPreference>(getString(R.string.wallpaper_selector_pref_key))
             if (requestCode == 0) {
-                wallpaperSelectorPreference?.mStartImageView?.setImageURI(data?.data)
+                val intent = Intent(activity, WallpaperPreviewActivity::class.java).apply {
+                    putExtra(WALLPAPER_PREVIEW_ACTIVITY_IMAGE_URI_KEY, data?.data.toString())
+                    mModeInProgress?.putIntoIntent(this)
+                }
+                startActivityForResult(intent, 1)
+            } else if (requestCode == 1) {
+                val mode = WallpaperMode.extractFromIntent(data!!)
+                val wallpaperSelectorPreference =
+                    preferenceManager.findPreference<WallpaperPreviewPreference>(getString(R.string.wallpaper_selector_pref_key))
+                val bitmap = FileUtil.getWallpaperBitmap(requireContext(), mode)
+                when (mode) {
+                    WallpaperMode.DARK ->
+                        wallpaperSelectorPreference?.mDarkModeImageView?.setImageBitmap(bitmap)
+                    WallpaperMode.LIGHT ->
+                        wallpaperSelectorPreference?.mLightModeImageView?.setImageBitmap(bitmap)
+                }
+                mModeInProgress = null
             }
         }
     }

@@ -7,7 +7,7 @@
     android:layout_height="240dp">
 
     <ImageView
-        android:id="@+id/StartImageView"
+        android:id="@+id/light_mode_image_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/temp_background"
@@ -17,13 +17,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/EndImageView"
+        app:layout_constraintEnd_toStartOf="@+id/dark_mode_image_view"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintDimensionRatio="W,1:1"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <ImageView
-        android:id="@+id/EndImageView"
+        android:id="@+id/dark_mode_image_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/temp_background"
@@ -32,7 +32,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/StartImageView"
+        app:layout_constraintStart_toEndOf="@+id/light_mode_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintDimensionRatio="W,1:1"

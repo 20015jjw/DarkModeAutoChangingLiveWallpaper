@@ -63,9 +63,13 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
         private fun draw(holder: SurfaceHolder) {
             if (mInitialized) {
                 val canvas = holder.lockCanvas()
-                if (mIsDarkMode) {
-                    canvas.drawRGB(0, 0, 0)
-                } else {
+                try {
+                    val bmp = FileUtil.getWallpaperBitmap(
+                        this@AutoChangingLiveWallpaperService,
+                        if (mIsDarkMode) WallpaperMode.DARK else WallpaperMode.LIGHT
+                    )
+                    canvas.drawBitmap(bmp, 0F, 0F, null)
+                } catch (e: Exception) {
                     canvas.drawRGB(0, 125, 125)
                 }
                 holder.unlockCanvasAndPost(canvas)
