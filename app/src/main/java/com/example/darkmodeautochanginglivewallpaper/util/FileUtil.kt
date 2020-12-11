@@ -12,8 +12,8 @@ object FileUtil {
 
     private fun getWallpaperPath(context: Context, wallpaperMode: WallpaperMode): String {
         return context.getExternalFilesDir(null).toString() +
-                File.separator +
-                wallpaperMode.getFileName()
+            File.separator +
+            wallpaperMode.getFileName()
     }
 
     fun getWallpaperBitmap(context: Context, wallpaperMode: WallpaperMode): Bitmap {
@@ -29,7 +29,7 @@ object FileUtil {
         val file = File(getWallpaperPath(context, wallpaperMode))
         file.createNewFile()
 
-        //Convert bitmap to byte array
+        // Convert bitmap to byte array
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(
             Bitmap.CompressFormat.PNG,
@@ -38,7 +38,7 @@ object FileUtil {
         ) // YOU can also save it in JPEG
         val bitmapData = byteArrayOutputStream.toByteArray()
 
-        //write the bytes in file
+        // write the bytes in file
         val fileOutputStream = FileOutputStream(file)
         fileOutputStream.write(bitmapData)
         fileOutputStream.flush()

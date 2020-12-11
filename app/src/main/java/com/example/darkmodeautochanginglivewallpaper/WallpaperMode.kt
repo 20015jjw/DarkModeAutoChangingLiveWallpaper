@@ -44,5 +44,4 @@ enum class WallpaperMode {
     fun putIntoBundle(bundle: Bundle) {
         bundle.putInt(KEY, ordinal)
     }
-
 }

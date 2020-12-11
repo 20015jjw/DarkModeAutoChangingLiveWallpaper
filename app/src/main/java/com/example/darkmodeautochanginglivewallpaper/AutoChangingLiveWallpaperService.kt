@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
-
 class AutoChangingLiveWallpaperService : WallpaperService() {
 
     private var mCurrentConfig: Configuration? = null
@@ -37,10 +36,12 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
     }
 
     private fun isDarkMode(newConfig: Configuration): Boolean {
-        return newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        return newConfig.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
 
-    private inner class AutoChangingWallpaperEngine : WallpaperService.Engine(),
+    private inner class AutoChangingWallpaperEngine :
+        WallpaperService.Engine(),
         SurfaceHolder.Callback {
         private var mSurfaceHolder: SurfaceHolder? = null
         private lateinit var mPref: SharedPreferences
@@ -52,7 +53,10 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
             super.onCreate(surfaceHolder)
             mPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
             mPrefChangeListener =
-                SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, _: String -> redraw() }
+                SharedPreferences.OnSharedPreferenceChangeListener {
+                    _: SharedPreferences, _: String ->
+                    redraw()
+                }
             mPref.registerOnSharedPreferenceChangeListener(mPrefChangeListener)
             mSurfaceHolder = surfaceHolder
             surfaceHolder?.addCallback(this)
@@ -97,5 +101,4 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
             }
         }
     }
-
 }

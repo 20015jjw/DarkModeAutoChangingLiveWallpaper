@@ -10,7 +10,6 @@ import androidx.core.view.drawToBitmap
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 import com.github.chrisbanes.photoview.PhotoView
 
-
 const val WALLPAPER_PREVIEW_ACTIVITY_IMAGE_URI_KEY = "wallpaper_preview_activity_image_uri_key"
 
 class WallpaperPreviewActivity : Activity() {
@@ -47,20 +46,18 @@ class WallpaperPreviewActivity : Activity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }
         val uiOptions = window.decorView.systemUiVisibility
         var newUiOptions = uiOptions
         newUiOptions = newUiOptions or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         window.decorView.systemUiVisibility = newUiOptions
     }
-
 }

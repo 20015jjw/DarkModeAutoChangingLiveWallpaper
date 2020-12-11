@@ -10,7 +10,6 @@ import androidx.preference.PreferenceViewHolder
 import com.example.darkmodeautochanginglivewallpaper.util.DisplayUtil
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
-
 class WallpaperPreviewPreference : Preference {
 
     companion object {
@@ -61,7 +60,6 @@ class WallpaperPreviewPreference : Preference {
 
         setImageViewRatio()
         setImageViewContent()
-
     }
 
     private fun setImageViewRatio() {
