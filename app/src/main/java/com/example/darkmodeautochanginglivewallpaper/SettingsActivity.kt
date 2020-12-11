@@ -1,11 +1,14 @@
 package com.example.darkmodeautochanginglivewallpaper
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import com.example.darkmodeautochanginglivewallpaper.constant.SharedPrefConstants
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
 class SettingsActivity : AppCompatActivity() {
@@ -27,6 +30,12 @@ class SettingsActivity : AppCompatActivity() {
 
     class SettingsFragment : PreferenceFragmentCompat(), WallpaperPreviewPreference.Delegate {
         private var mModeInProgress: WallpaperMode? = null
+        private lateinit var mSharedPref: SharedPreferences
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            mSharedPref = PreferenceManager.getDefaultSharedPreferences(context?.applicationContext)
+        }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -81,6 +90,8 @@ class SettingsActivity : AppCompatActivity() {
                     WallpaperMode.LIGHT ->
                         wallpaperSelectorPreference?.mLightModeImageView?.setImageBitmap(bitmap)
                 }
+                mSharedPref.edit()
+                    .putLong(SharedPrefConstants.UPDATE_TIME, System.currentTimeMillis()).apply()
                 mModeInProgress = null
             }
         }

@@ -1,14 +1,17 @@
 package com.example.darkmodeautochanginglivewallpaper
 
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import android.widget.Toast
+import androidx.preference.PreferenceManager
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
 
 class AutoChangingLiveWallpaperService : WallpaperService() {
 
+    private var mCurrentConfig: Configuration? = null
     private lateinit var mEngine: AutoChangingWallpaperEngine
 
     override fun onCreateEngine(): Engine {
@@ -23,9 +26,14 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
     }
 
     private fun update(newConfig: Configuration) {
+        mCurrentConfig = newConfig
         val isDarkMode = isDarkMode(newConfig)
         Toast.makeText(this, if (isDarkMode) "yes" else "no", Toast.LENGTH_SHORT).show()
         mEngine.update(isDarkMode)
+    }
+
+    fun redraw() {
+        mCurrentConfig?.let { update(it) }
     }
 
     private fun isDarkMode(newConfig: Configuration): Boolean {
@@ -35,13 +43,24 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
     private inner class AutoChangingWallpaperEngine : WallpaperService.Engine(),
         SurfaceHolder.Callback {
         private var mSurfaceHolder: SurfaceHolder? = null
+        private lateinit var mPref: SharedPreferences
+        private lateinit var mPrefChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
         private var mInitialized = false
         private var mIsDarkMode = false
 
         override fun onCreate(surfaceHolder: SurfaceHolder?) {
             super.onCreate(surfaceHolder)
+            mPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            mPrefChangeListener =
+                SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, _: String -> redraw() }
+            mPref.registerOnSharedPreferenceChangeListener(mPrefChangeListener)
             mSurfaceHolder = surfaceHolder
             surfaceHolder?.addCallback(this)
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            mPref.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener)
         }
 
         override fun surfaceCreated(holder: SurfaceHolder) {
@@ -54,6 +73,7 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
         }
 
         override fun surfaceDestroyed(holder: SurfaceHolder) {
+            mInitialized = false
         }
 
         fun update(isDarkMode: Boolean) {
