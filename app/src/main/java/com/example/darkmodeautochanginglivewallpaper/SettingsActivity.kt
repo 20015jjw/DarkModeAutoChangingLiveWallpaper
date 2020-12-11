@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -69,30 +70,38 @@ class SettingsActivity : AppCompatActivity() {
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
-            if (requestCode == WALLPAPER_SELECT_REQUEST_CODE) {
-                val intent = Intent(activity, WallpaperPreviewActivity::class.java).apply {
-                    putExtra(WALLPAPER_PREVIEW_ACTIVITY_IMAGE_URI_KEY, data?.data.toString())
-                    mModeInProgress?.putIntoIntent(this)
-                }
-                startActivityForResult(intent, WALLPAPER_PREVIEW_REQUEST_CODE)
-            } else if (requestCode == WALLPAPER_PREVIEW_REQUEST_CODE) {
-                val mode = WallpaperMode.extractFromIntent(data!!)
-                val wallpaperSelectorPreference =
-                    preferenceManager.findPreference<WallpaperPreviewPreference>(
-                        getString(
-                            WallpaperPreviewPreference.KEY_ID
+            try {
+                if (requestCode == WALLPAPER_SELECT_REQUEST_CODE) {
+                    val intent = Intent(activity, WallpaperPreviewActivity::class.java).apply {
+                        putExtra(WALLPAPER_PREVIEW_ACTIVITY_IMAGE_URI_KEY, data!!.data.toString())
+                        mModeInProgress?.putIntoIntent(this)
+                    }
+                    startActivityForResult(intent, WALLPAPER_PREVIEW_REQUEST_CODE)
+                } else if (requestCode == WALLPAPER_PREVIEW_REQUEST_CODE) {
+                    val mode = WallpaperMode.extractFromIntent(data!!)
+                    val wallpaperSelectorPreference =
+                        preferenceManager.findPreference<WallpaperPreviewPreference>(
+                            getString(
+                                WallpaperPreviewPreference.KEY_ID
+                            )
                         )
-                    )
-                val bitmap = FileUtil.getWallpaperBitmap(requireContext(), mode)
-                when (mode) {
-                    WallpaperMode.DARK ->
-                        wallpaperSelectorPreference?.mDarkModeImageView?.setImageBitmap(bitmap)
-                    WallpaperMode.LIGHT ->
-                        wallpaperSelectorPreference?.mLightModeImageView?.setImageBitmap(bitmap)
+                    val bitmap = FileUtil.getWallpaperBitmap(requireContext(), mode)
+                    when (mode) {
+                        WallpaperMode.DARK ->
+                            wallpaperSelectorPreference?.mDarkModeImageView?.setImageBitmap(bitmap)
+                        WallpaperMode.LIGHT ->
+                            wallpaperSelectorPreference?.mLightModeImageView?.setImageBitmap(bitmap)
+                    }
+                    mSharedPref.edit()
+                        .putLong(SharedPrefConstants.UPDATE_TIME, System.currentTimeMillis())
+                        .apply()
+                    mModeInProgress = null
                 }
-                mSharedPref.edit()
-                    .putLong(SharedPrefConstants.UPDATE_TIME, System.currentTimeMillis()).apply()
-                mModeInProgress = null
+            } catch (npe: NullPointerException) {
+                // We are here mostly because the user ended the flow early
+            } catch (e: Exception) {
+                // We are here mostly because something blew up
+                Toast.makeText(context, getString(R.string.generic_error), Toast.LENGTH_LONG).show()
             }
         }
     }
