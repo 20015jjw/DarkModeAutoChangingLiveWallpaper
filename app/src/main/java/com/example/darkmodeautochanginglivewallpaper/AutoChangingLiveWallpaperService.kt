@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
-import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.example.darkmodeautochanginglivewallpaper.util.FileUtil
 
@@ -27,7 +26,6 @@ class AutoChangingLiveWallpaperService : WallpaperService() {
     private fun update(newConfig: Configuration) {
         mCurrentConfig = newConfig
         val isDarkMode = isDarkMode(newConfig)
-        Toast.makeText(this, if (isDarkMode) "yes" else "no", Toast.LENGTH_SHORT).show()
         mEngine.update(isDarkMode)
     }
 
